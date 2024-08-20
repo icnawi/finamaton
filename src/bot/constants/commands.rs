@@ -1,0 +1,9 @@
+pub const COMMAND_HELP: &str = "/help";
+pub const COMMAND_CANCEL: &str = "/cancel";
+pub const COMMAND_ADD_PAYMENT: &str = "/addpayment";
+pub const COMMAND_PAY_BACK: &str = "/payback";
+pub const COMMAND_VIEW_PAYMENTS: &str = "/viewpayments";
+pub const COMMAND_EDIT_PAYMENT: &str = "/editpayment";
+pub const COMMAND_DELETE_PAYMENT: &str = "/deletepayment";
+pub const COMMAND_BALANCES: &str = "/balances";
+pub const COMMAND_SPENDINGS: &str = "/spendings";
