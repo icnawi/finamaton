@@ -1,5 +1,5 @@
 [package]
-name = "chaching_clan"
+name = "finamaton"
 version = "0.1.0"
 edition = "2021"
 
@@ -27,5 +27,5 @@ features = [
 ]
 
 [lib]
-name = "chaching_clan"
+name = "finamaton"
 path = "src/lib.rs"
