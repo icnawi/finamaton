@@ -106,14 +106,14 @@ async fn handle_spendings_with_option(
 
             let header = if let StatementOption::Currency(curr) = option {
                 if curr == CURRENCY_DEFAULT.0 {
-                    format!("🔥 Here are the total spendings!")
+                    format!("🔥 Total spendings!")
                 } else {
-                    format!("🔥 Here are the total spendings for {curr}!")
+                    format!("🔥 Total spendings for {curr}!")
                 }
             } else if has_buttons {
-                format!("🔥 Here are the total spendings, converted to {default_currency}!")
+                format!("🔥 Total spendings, converted to {default_currency}!")
             } else {
-                format!("🔥 Here are the total spendings!")
+                format!("🔥 Total spendings!")
             };
 
             match id {

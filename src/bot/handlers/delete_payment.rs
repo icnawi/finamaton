@@ -82,7 +82,7 @@ pub async fn handle_repeated_delete_payment(
     let new_message = send_bot_message(
         &bot,
         &msg,
-        format!("🚫 Oops! It seems like you're already in the middle of deleting a payment! Please finish or {COMMAND_CANCEL} this before starting another one with me."),
+        format!("Oops! Probably you forgot to delete payment! Please finish or {COMMAND_CANCEL} this before starting another one with me."),
         ).await?.id;
 
     repeat_state(dialogue, state, new_message).await?;
@@ -141,7 +141,7 @@ pub async fn block_delete_payment(
     let new_message = send_bot_message(
         &bot,
         &msg,
-        format!("🚫 Oops! It seems like you're in the middle of deleting a payment! Please finish or {COMMAND_CANCEL} this before starting something new with me."),
+        format!("Oops! Probably you forgot to delete payment! Please finish or {COMMAND_CANCEL} this before starting something new with me."),
         ).await?.id;
 
     repeat_state(dialogue, state, new_message).await?;
@@ -186,7 +186,7 @@ pub async fn action_delete_payment(
         chat_id,
         msg_id,
         format!(
-            "Do you really, really, want to 🗑 delete this payment? I won't be able to undo this... 🫢\n\n{}",
+            "Are you sure you want to delete this expense permanently?\n\n{}",
             display_payment(&payment, index + 1, time_zone)
         ),
     )
@@ -233,7 +233,7 @@ pub async fn action_delete_payment_confirm(
                                 &bot,
                                 &msg,
                                 format!(
-                                    "🎉 Yay! Payment deleted! 🎉\n\n{}",
+                                    "Expense successfully deleted!\n\n{}",
                                     display_payment(&payment, 1, time_zone)
                                 ),
                             )
@@ -265,7 +265,7 @@ pub async fn action_delete_payment_confirm(
                             send_bot_message(
                                 &bot,
                                 &msg,
-                                format!("⁉️ Oh no! Something went wrong! 🥺 I'm sorry, but I can't delete the payment right now. Please try again later!\n\n" ),
+                                format!("🤷 Oops! Something went wrong! I can't delete the payment right now. Please try again later!\n\n" ),
                                 )
                                 .await?;
 

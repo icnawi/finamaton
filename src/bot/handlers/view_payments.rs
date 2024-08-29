@@ -241,7 +241,7 @@ pub async fn action_view_payments(bot: Bot, dialogue: UserDialogue, msg: Message
                     .await?;
             }
             Err(ProcessError::CrudError(CrudError::NoPaymentsError())) => {
-                send_bot_message(&bot, &msg, format!("😖 I can't find any payment records! But I'm always ready to help you get started with {COMMAND_ADD_PAYMENT}!"))
+                send_bot_message(&bot, &msg, format!("No payments records found! But let's start adding one {COMMAND_ADD_PAYMENT}!"))
                     .await?;
 
                 // Logging

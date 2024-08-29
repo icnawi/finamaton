@@ -178,7 +178,7 @@ async fn display_edit_overview(
                 msg.chat.id,
                 id,
                 format!(
-                    "Sure! What would you like to ✏️ edit?\n\n{}",
+                    "Sure! What expense do you wish to ✏️ edit?\n\n{}",
                     display_edit_payment(payment.clone(), edited_payment.clone())
                 ),
             )
@@ -190,7 +190,7 @@ async fn display_edit_overview(
                 &bot,
                 msg,
                 format!(
-                    "Sure! What would you like to ✏️ edit?\n\n{}",
+                    "Sure! What expense do you wish to ✏️ edit?\n\n{}",
                     display_edit_payment(payment.clone(), edited_payment.clone())
                 ),
             )
@@ -242,7 +242,7 @@ async fn call_processor_edit_payment(
                 send_bot_message(
                     &bot,
                     &msg,
-                    format!("Hmm❓ it seems like you didn't make any changes! But that's okay, 🤭 I've cancelled editing the payment for you!"),
+                    format!("You haven't added change to this expense. I've automatically cancelled editing the payment for you!"),
                 )
                 .await?;
                 complete_edit_payment(&bot, dialogue, &chat_id, messages, payments, page).await?;
@@ -270,7 +270,7 @@ async fn call_processor_edit_payment(
                             send_bot_message(
                                 &bot,
                                 &msg,
-                                format!("🎉 Yay! Payment edited! 🎉\n\n{}", edit_overview,),
+                                format!("Expense successfully edited!\n\n{}", edit_overview,),
                             )
                             .await?;
                             send_bot_message(
@@ -297,7 +297,7 @@ async fn call_processor_edit_payment(
                                 &bot,
                                 &msg,
                             format!(
-                                "🎉 Yay! Payment edited! 🎉\n\n{}\nThere are no changes to the balances! 🥳",
+                                "Expense successfully edited!\n\n{}\nThere are no changes to the balances!",
                                 edit_overview
                                 ),
                                 )
@@ -320,7 +320,7 @@ async fn call_processor_edit_payment(
                         &bot,
                         &msg,
                         format!(
-                            "⁉️ Oh no! Something went wrong! 🥺 I'm sorry, but I can't edit the payment right now. Please try again later!\n\n"
+                            "🤷 Oops! Something went wrong! I can't edit the payment right now. Please try again later!\n\n"
                         ),
                     )
                     .await?;
@@ -357,7 +357,7 @@ pub async fn handle_repeated_edit_payment(
     let new_message = send_bot_message(
         &bot,
         &msg,
-        format!("🚫 Oops! It seems like you're already in the middle of editing a payment! Please finish or {COMMAND_CANCEL} this before starting another one with me."),
+        format!("🚫 Oops! Probably you forgot to edit payment! Please finish or {COMMAND_CANCEL} this before starting another one with me."),
         ).await?;
 
     repeat_state(dialogue, state, new_message.id).await?;
@@ -431,7 +431,7 @@ pub async fn block_edit_payment(
 ) -> HandlerResult {
     let new_message = send_bot_message(&bot,
         &msg,
-        format!("🚫 Oops! It seems like you're in the middle of editing a payment! Please finish or {COMMAND_CANCEL} this before starting something new with me."),
+        format!("Oops! Probably you forgot to edit payment! Please finish or {COMMAND_CANCEL} this before starting something new with me."),
         ).await?.id;
 
     repeat_state(dialogue, state, new_message).await?;

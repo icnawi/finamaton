@@ -71,7 +71,7 @@ pub fn parse_currency_amount(text: &str) -> Result<(i64, Currency), BotError> {
     let items = text.split_whitespace().collect::<Vec<&str>>();
     if items.len() > 2 {
         return Err(BotError::UserError(
-            "Uh-oh! ❌ I don't understand... Please use the following format!".to_string(),
+            "Sorry, unknown format... Please use the following format!".to_string(),
         ));
     } else if items.len() == 1 {
         let currency = get_default_currency();
@@ -147,8 +147,7 @@ pub fn process_debts_exact(
                 let items: Vec<&str> = text.split_whitespace().collect();
                 if items.len() % 2 != 0 {
                     return Err(BotError::UserError(
-                        "Uh-oh! ❌ I don't understand... Please use the following format!"
-                            .to_string(),
+                        "Sorry, unknown format... Please use the following format!".to_string(),
                     ));
                 }
 
@@ -230,7 +229,7 @@ pub fn process_debts_ratio(text: &str, total: Option<i64>) -> Result<Vec<(String
 
     if items.len() % 2 != 0 {
         return Err(BotError::UserError(
-            "Uh-oh! ❌ I don't understand... Please use the following format!".to_string(),
+            "Sorry, unknown format... Please use the following format!".to_string(),
         ));
     }
 
@@ -291,7 +290,7 @@ pub fn parse_debts_payback(
     let items: Vec<&str> = text.split_whitespace().collect();
     if items.len() % 2 != 0 {
         return Err(BotError::UserError(
-            "Uh-oh! ❌ I don't understand... Please use the following format!".to_string(),
+            "Sorry, unknown format... Please use the following format!".to_string(),
         ));
     }
 
@@ -300,7 +299,7 @@ pub fn parse_debts_payback(
         let amount = parse_amount(items[i + 1], currency.1)?;
         if is_username_equal(&username, sender) {
             return Err(BotError::UserError(
-                "Uh-oh! ❌ You can't pay back yourself!".to_string(),
+                "Oops! You can't repay to yourself!".to_string(),
             ));
         }
         let mut found = false;

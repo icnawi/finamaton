@@ -19,7 +19,7 @@ pub fn get_currency(code: &str) -> Result<Currency, BotError> {
     match currency {
         Some(currency) => Ok(currency),
         None => Err(BotError::UserError(
-            "🥺 Sorry, I don't know that currency!".to_string(),
+            "Sorry, unknown currency...".to_string(),
         )),
     }
 }
@@ -91,23 +91,17 @@ pub fn display_balance_header(chat_id: &str, currency: &str) -> String {
 
     if conversion {
         format!(
-            "✨ Ta-da! Here are the updated balances, all converted to {}!\n\n",
+            "Updated balances, all converted to {}!\n\n",
             default_currency
         )
     } else if currency == CURRENCY_DEFAULT.0 {
         if default_currency != CURRENCY_DEFAULT.0 {
-            format!(
-                "✨ Ta-da! Here are the updated balances in {}!\n\n",
-                default_currency
-            )
+            format!("Updated balances in {}!\n\n", default_currency)
         } else {
-            format!("✨ Ta-da! Here are the updated balances!\n\n")
+            format!("Updated balances!\n\n")
         }
     } else {
-        format!(
-            "✨ Ta-da! Here are the updated balances in {}!\n\n",
-            currency
-        )
+        format!("Updated balances in {}!\n\n", currency)
     }
 }
 

@@ -224,9 +224,17 @@ async fn display_add_overview(
     let buttons = vec!["Cancel", "Edit", "Confirm"];
     let keyboard = make_keyboard(buttons, Some(2));
 
-    let new_message = send_bot_message(&bot, &msg, format!("Here's what I've got so far! 📝\n\n{}Do you want to confirm this entry or would you like to make any changes?", display_add_payment(&payment)))
-        .reply_markup(keyboard)
-        .await?.id;
+    let new_message = send_bot_message(
+        &bot,
+        &msg,
+        format!(
+            "Here you go! 📝\n\n{}Do you submit this entry or do you want to make any changes?",
+            display_add_payment(&payment)
+        ),
+    )
+    .reply_markup(keyboard)
+    .await?
+    .id;
     messages.push(new_message);
     dialogue
         .update(State::AddConfirm { messages, payment })
@@ -252,7 +260,7 @@ async fn display_add_edit_menu(
             chat.id,
             id,
             format!(
-                "{}Sure! What would you like to edit?",
+                "{}Sure! What expense do you wish to edit?",
                 display_add_payment(&payment)
             ),
         )
@@ -413,7 +421,7 @@ async fn call_processor_add_payment(
                 send_bot_message(
                     &bot,
                     &msg,
-                    format!("🎉 Yay! Payment added! 🎉\n\n{}", payment_overview,),
+                    format!("Payment successfully added!\n\n{}", payment_overview,),
                 )
                 .await?;
                 send_bot_message(
@@ -440,7 +448,7 @@ async fn call_processor_add_payment(
                     &bot,
                     &msg,
                     format!(
-                        "⁉️ Oh no! Something went wrong! 🥺 I'm sorry, but I can't add the payment right now. Please try again later!\n\n"
+                        "🤷 Oops! Something went wrong! I can't add the payment right now. Please try again later!\n\n"
                     ),
                 )
                 .await?;
@@ -477,7 +485,7 @@ pub async fn handle_repeated_add_payment(
 
     let new_message = send_bot_message(&bot,
         &msg,
-        format!("🚫 Oops! It seems like you're already in the middle of adding a payment! Please finish or {COMMAND_CANCEL} this before starting another one with me."),
+        format!("Oops! Probably you forgot to add payment! Please finish or {COMMAND_CANCEL} this before starting another one with me."),
         ).await?.id;
 
     repeat_state(dialogue, state, new_message).await?;
@@ -532,7 +540,7 @@ pub async fn block_add_payment(
     let new_message = send_bot_message(
         &bot,
         &msg,
-        format!("🚫 Oops! It seems like you're in the middle of adding a payment! Please finish or {COMMAND_CANCEL} this before starting something new with me."),
+        format!("Oops! Probably you forgot to add payment! Please finish or {COMMAND_CANCEL} this before starting something new with me."),
         ).await?.id;
 
     repeat_state(dialogue, state, new_message).await?;
@@ -551,9 +559,7 @@ pub async fn action_add_payment(bot: Bot, dialogue: UserDialogue, msg: Message) 
     let new_message = send_bot_message(
         &bot,
         &msg,
-        format!(
-            "Absolutely, 🙌 let's get started! \n\nWhat's the description for this new payment?"
-        ),
+        format!("Absolutely, let's get started! \n\nWhat's the description for this new expense?"),
     )
     .await?
     .id;
@@ -613,7 +619,7 @@ pub async fn action_add_description(
                         &bot,
                         &msg,
                         format!(
-                            "{}Awesome! What's the Telegram username of the one who paid?",
+                            "{}Great! What's the Telegram username of the one who paid?",
                             display_add_payment(&payment)
                         ),
                     )
@@ -671,7 +677,7 @@ pub async fn action_add_creditor(
                 &bot,
                 &msg,
                 format!(
-                    "{}Nice! How much was the total amount?\n\n{TOTAL_INSTRUCTIONS_MESSAGE}",
+                    "{}Nice! What was the budget?\n\n{TOTAL_INSTRUCTIONS_MESSAGE}",
                     display_add_payment(&new_payment)
                 ),
             )
@@ -725,7 +731,7 @@ pub async fn action_add_total(
                         &bot,
                         &msg,
                         format!(
-                            "{}Fantastic! How are we splitting this?\n\n{DEBT_EQUAL_DESCRIPTION_MESSAGE}{DEBT_EXACT_DESCRIPTION_MESSAGE}{DEBT_RATIO_DESCRIPTION_MESSAGE}",
+                            "{}Great! How do we split?\n\n{DEBT_EQUAL_DESCRIPTION_MESSAGE}{DEBT_EXACT_DESCRIPTION_MESSAGE}{DEBT_RATIO_DESCRIPTION_MESSAGE}",
                             display_add_payment(&new_payment)
                             ),
                             )
@@ -802,9 +808,11 @@ pub async fn action_add_debt_selection(
                         chat.id,
                         id,
                         format!(
-                            "{}Okay! Who is involved and how much do they owe?\n\n{DEBT_EXACT_INSTRUCTIONS_MESSAGE}",
-                            display_add_payment(&payment))
-                        ).await?;
+                            "{}Okay! Provide usernames of debtors and their debt amounts.\n\n{DEBT_EXACT_INSTRUCTIONS_MESSAGE}",
+                            display_add_payment(&payment)
+                        ),
+                    )
+                    .await?;
                     dialogue
                         .update(State::AddDebt {
                             messages,
@@ -820,7 +828,7 @@ pub async fn action_add_debt_selection(
                         chat.id,
                         id,
                         format!(
-                            "{}Okay! Who is involved and how much do they owe?\n\n{DEBT_RATIO_INSTRUCTIONS_MESSAGE}",
+                            "{}Okay! Provide usernames of debtors and their debt amounts.\n\n{DEBT_RATIO_INSTRUCTIONS_MESSAGE}",
                             display_add_payment(&payment))
                         ).await?;
                     dialogue
@@ -1057,7 +1065,7 @@ pub async fn action_add_edit(
                         };
                         let new_message = send_bot_message(&bot,
                             &msg,
-                            format!("Fantastic! How are we splitting this?\n\n{DEBT_EQUAL_DESCRIPTION_MESSAGE}{DEBT_EXACT_DESCRIPTION_MESSAGE}{DEBT_RATIO_DESCRIPTION_MESSAGE}",),
+                            format!("Great! How are we splitting this?\n\n{DEBT_EQUAL_DESCRIPTION_MESSAGE}{DEBT_EXACT_DESCRIPTION_MESSAGE}{DEBT_RATIO_DESCRIPTION_MESSAGE}",),
                             ).reply_markup(make_keyboard_debt_selection())
                             .await?.id;
                         messages.push(new_message);

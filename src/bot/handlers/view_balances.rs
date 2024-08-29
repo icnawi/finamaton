@@ -68,14 +68,14 @@ async fn handle_balances_with_option(
 
             let header = if let StatementOption::Currency(curr) = option {
                 if curr == CURRENCY_DEFAULT.0 {
-                    format!("📊 Here are the current balances!")
+                    format!("📊 Current balances!")
                 } else {
-                    format!("📊 Here are the current {curr} balances!")
+                    format!("📊 Current {curr} balances!")
                 }
             } else if has_buttons {
-                format!("📊 Here are the current balances, converted to {default_currency}!")
+                format!("📊 Current balances, converted to {default_currency}!")
             } else {
-                format!("📊 Here are the current balances!")
+                format!("📊 Current balances!")
             };
 
             match id {

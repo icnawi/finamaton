@@ -4,9 +4,10 @@ use crate::bot::{
     constants::{
         commands::{
             COMMAND_ADD_PAYMENT, COMMAND_BALANCES, COMMAND_DELETE_PAYMENT, COMMAND_EDIT_PAYMENT,
-            COMMAND_HELP, COMMAND_PAY_BACK, COMMAND_SPENDINGS, COMMAND_VIEW_PAYMENTS,
+            /* COMMAND_HELP, */ COMMAND_PAY_BACK, COMMAND_SPENDINGS, COMMAND_VIEW_PAYMENTS,
         },
-        urls::{FEEDBACK_URL, USER_GUIDE_URL},
+        messages::BLANK_CANCEL,
+        // urls::{FEEDBACK_URL, USER_GUIDE_URL},
     },
     dispatcher::Command,
     processor::init_chat_config,
@@ -68,15 +69,15 @@ pub async fn action_start(bot: Bot, msg: Message) -> HandlerResult {
     // Inits chat configs
     init_chat_config(&msg.chat.id.to_string())?;
 
-    let introduction = format!("👋 Hello! I'm ChaChing! 😊\n\n🧚‍♀️ I'll be tracking your group payments and working my magic 🪄 to simplify your debts, so you won't have to juggle so many payments back to your friends!");
-    let add_info = &format!("✍️ Ready to track together in this group chat? Start with {COMMAND_ADD_PAYMENT}! You can {COMMAND_VIEW_PAYMENTS} anytime, and I'll help to {COMMAND_EDIT_PAYMENT} or {COMMAND_DELETE_PAYMENT} if you'd like!");
-    let view_info = &format!("🙈 Check out {COMMAND_SPENDINGS} to see who's been splurging! Peek at {COMMAND_BALANCES} for who owes what, but don't forget to {COMMAND_PAY_BACK} your friends!");
-    let closing =
-        &format!("🤗 Have fun tracking, and don't hesitate to ask me for {COMMAND_HELP} anytime!");
+    // TODO: Add to messages constant
+    let intro = format!("Hello! I'm Finamaton!\n\nI'm tracking both individual and group expenses to simplify finance management");
+
+    let add_info = &format!("Start with {COMMAND_ADD_PAYMENT}. You can {COMMAND_VIEW_PAYMENTS} anytime, and I'll help to {COMMAND_EDIT_PAYMENT} or {COMMAND_DELETE_PAYMENT}.");
+    let view_info = &format!("Check out {COMMAND_SPENDINGS} to see overall spendings. Track {COMMAND_BALANCES} of those who owes what. To repay, use {COMMAND_PAY_BACK}");
     send_bot_message(
         &bot,
         &msg,
-        format!("{introduction}\n\n{add_info}\n\n{view_info}\n\n{closing}"),
+        format!("{intro}\n\n{add_info}\n\n{view_info}\n\n"),
     )
     .await?;
     Ok(())
@@ -93,21 +94,13 @@ pub async fn action_help(bot: Bot, msg: Message) -> HandlerResult {
     let mut commands = Command::descriptions().to_string();
     commands = commands.replace("–", "\\—");
 
-    let user_guide_info = &format!("🆘 For all the nitty\\-gritty details on supported 🕔 time zones, 💵 currencies, and more, check out my [User Guide]({USER_GUIDE_URL})\\!");
-    let feedback_info = &format!(
-        "💖 And if you have any [feedback]({FEEDBACK_URL}) for me, I'd love to hear it\\!"
-    );
+    // TODO: Add to messages constant
 
-    send_bot_message(
-        &bot,
-        &msg,
-        format!(
-            "⭐️ *My Commands* ⭐️\n\n{}\n\n{user_guide_info}\n\n{feedback_info}",
-            commands
-        ),
-    )
-    .parse_mode(ParseMode::MarkdownV2)
-    .await?;
+    // let user_guide_info = &format!("🆘 For all the nitty\\-gritty details on supported 🕔 time zones, 💵 currencies, and more, check out my [User Guide]({USER_GUIDE_URL})\\!");
+
+    send_bot_message(&bot, &msg, format!("*Commands*\n\n{}", commands))
+        .parse_mode(ParseMode::MarkdownV2)
+        .await?;
 
     Ok(())
 }
@@ -123,7 +116,7 @@ pub async fn action_cancel(bot: Bot, msg: Message) -> HandlerResult {
     send_bot_message(
         &bot,
         &msg,
-        format!("❌ I'm not doing anything... 👀\nThere's nothing to cancel!"),
+        format!("{BLANK_CANCEL}"), // TODO: Add to messages constant
     )
     .await?;
     Ok(())

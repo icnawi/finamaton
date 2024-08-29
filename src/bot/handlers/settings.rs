@@ -105,7 +105,7 @@ async fn display_settings_menu(
 
     let keyboard = make_keyboard(buttons, Some(2));
     let message = format!(
-        "With pleasure\\! 😉 Let's see, here are the ⚙️ settings you can customize\\. What would you like to view or edit?\n\n{DEFAULT_CURRENCY_DESCRIPTION}\n\n{CURRENCY_CONVERSION_DESCRIPTION}\n\n{ERASE_MESSAGES_DESCRIPTION}\n\n{TIME_ZONE_DESCRIPTION}",
+        "Settings:\n\n{DEFAULT_CURRENCY_DESCRIPTION}\n\n{CURRENCY_CONVERSION_DESCRIPTION}\n\n{ERASE_MESSAGES_DESCRIPTION}\n\n{TIME_ZONE_DESCRIPTION}",
         );
 
     match msg_id {
@@ -145,7 +145,7 @@ pub async fn handle_repeated_settings(
     let new_message = send_bot_message(
         &bot,
         &msg,
-        format!("🚫 Oops! It seems like you're already in the middle of customizing my settings! Please finish or {COMMAND_CANCEL} this before starting another one with me."),
+        format!("🚫 Oops! Probably you forgot to customize settings! Please finish or {COMMAND_CANCEL} this before starting another one with me."),
         ).await?.id;
 
     repeat_state(dialogue, state, new_message).await?;
@@ -201,7 +201,7 @@ pub async fn block_settings(
     let new_message = send_bot_message(
         &bot,
         &msg,
-        format!("🚫 Oops! It seems like you're in the middle of customizing my settings! Please finish or {COMMAND_CANCEL} this before starting something new with me."),
+        format!("🚫 Oops! Probably you forgot to customize settings! Please finish or {COMMAND_CANCEL} this before starting something new with me."),
         ).await?.id;
 
     repeat_state(dialogue, state, new_message).await?;
@@ -244,7 +244,7 @@ pub async fn action_settings_menu(
                         chat_id,
                         msg.id,
                         format!(
-                            "🕔 Time Zone: {}\n\nWould you like to edit the time zone for this chat?",
+                            "Time Zone: {}\n\nDo you wish to update the time zone for this chat?",
                             time_zone
                         ),
                     )
@@ -272,7 +272,7 @@ pub async fn action_settings_menu(
                             chat_id,
                             msg.id,
                             format!(
-                                "{currency_info}\n\nWould you like to edit the default currency for this chat?",
+                                "{currency_info}\n\nDo you wish to update the default currency for this chat?",
                                 ))
                             .reply_markup(keyboard)
                             .await?;
@@ -291,19 +291,18 @@ pub async fn action_settings_menu(
                         if convert {
                             status = "ENABLED ✅";
                             buttons = vec!["Back", "Turn Off"];
-                            prompt =
-                                "Would you like to turn off currency conversion for this chat?";
+                            prompt = "Do you wish to turn off currency conversion for this chat?";
                         } else {
                             let currency =
                                 get_chat_setting(&chat_id, ChatSetting::DefaultCurrency(None))?;
                             if let ChatSetting::DefaultCurrency(Some(currency)) = currency {
                                 if currency == CURRENCY_DEFAULT.0 {
                                     buttons = vec!["Back"];
-                                    prompt = "⭐️ If you wish to turn on currency conversion, please set a default currency first!";
+                                    prompt = "⭐️ If you want to turn on currency conversion, please set a default currency first!";
                                 } else {
                                     buttons = vec!["Back", "Turn On"];
                                     prompt =
-                                        "Would you like to turn on currency conversion for this chat?";
+                                        "Do you wish to turn on currency conversion for this chat?";
                                 }
                             } else {
                                 // Should not occur, these are placeholder values
@@ -318,7 +317,7 @@ pub async fn action_settings_menu(
                         bot.edit_message_text(
                             chat_id,
                             msg.id,
-                            format!("↔️ Currency Conversion is currently {status}.\n\n{prompt}",),
+                            format!("Currency Conversion is currently {status}.\n\n{prompt}",),
                         )
                         .reply_markup(keyboard)
                         .await?;
@@ -399,7 +398,7 @@ pub async fn action_time_zone_menu(
                         msg.chat.id,
                         msg.id,
                         format!(
-                            "🕔 Time Zone: {}\n\nWhat time zone would you like to set?\n\n{TIME_ZONE_INSTRUCTIONS_MESSAGE}",
+                            "Time Zone: {}\n\nWhat time zone do you wish to set?\n\n{TIME_ZONE_INSTRUCTIONS_MESSAGE}",
                             time_zone
                             ),
                             )
@@ -447,7 +446,7 @@ pub async fn action_settings_time_zone(
                             send_bot_message(
                                 &bot,
                                 &msg,
-                                format!("You got it! I've set the 🕔 Time Zone to {}!", time_zone),
+                                format!("Time Zone is set to {}!", time_zone),
                             )
                             .await?;
 
@@ -508,7 +507,7 @@ pub async fn action_default_currency_menu(
                             send_bot_message(
                                 &bot,
                                 &msg,
-                                format!("You got it! I've disabled the 💵 Default Currency!"),
+                                format!("💵 Default Currency is disabled"),
                             )
                             .await?;
 
@@ -551,7 +550,7 @@ pub async fn action_default_currency_menu(
                             chat_id,
                             msg.id,
                             format!(
-                                "{currency_info}\n\nWhat would you like to set as the default currency?\n\n{CURRENCY_INSTRUCTIONS_MESSAGE}",
+                                "{currency_info}\n\nWhat currency do you want to set as the default one?\n\n{CURRENCY_INSTRUCTIONS_MESSAGE}",
                                 ))
                             .await?;
                         dialogue
@@ -600,10 +599,7 @@ pub async fn action_settings_default_currency(
                             send_bot_message(
                                 &bot,
                                 &msg,
-                                format!(
-                                    "You got it! I've set the 💵 Default Currency to {}!",
-                                    currency.0
-                                ),
+                                format!("Default Currency is set to {}!", currency.0),
                             )
                             .await?;
 
